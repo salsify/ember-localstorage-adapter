@@ -119,6 +119,7 @@
       }
 
       if (!record || !record.hasOwnProperty('id')) {
+        store.recordWasError(opts);
         return Ember.RSVP.reject(new Error("Couldn't find record of"
                                            + " type '" + type.typeKey
                                            + "' for the id '" + id + "'."));
