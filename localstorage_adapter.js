@@ -119,7 +119,7 @@
       }
 
       if (!record || !record.hasOwnProperty('id')) {
-        store.recordWasError(opts);
+        store.dematerializeRecord(opts);
         return Ember.RSVP.reject(new Error("Couldn't find record of"
                                            + " type '" + type.typeKey
                                            + "' for the id '" + id + "'."));
@@ -148,6 +148,14 @@
        */
       if (opts && typeof opts.allowRecursive !== 'undefined') {
         allowRecursive = opts.allowRecursive;
+      }
+
+      for (var i = 0; i < ids.length; i++) {
+        record = namespace.records[ids[i]];
+        if (!record || !record.hasOwnProperty('id')) {
+          var missing_record = opts.findBy('id', ids[i]);
+          store.dematerializeRecord(missing_record);
+        }
       }
 
       for (var i = 0; i < ids.length; i++) {
